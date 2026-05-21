@@ -4,6 +4,10 @@ from flask import Flask, render_template, session
 from flask_cors import CORS
 from config import Config
 
+from database.models import init_db
+from routes.diary import diary_bp
+from routes.user import user_bp
+
 
 def create_app():
     app = Flask(__name__)
