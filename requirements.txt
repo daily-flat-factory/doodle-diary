@@ -1,0 +1,11 @@
+flask==3.0.3
+flask-limiter==3.8.0
+flask-cors==4.0.1
+anthropic==0.28.0
+requests==2.32.3
+python-dotenv==1.0.1
+Pillow==10.4.0
+# Phase 2: Rate limit 백엔드 교체 시 사용
+redis==5.0.8
+# 배포용         
+gunicorn==22.0.0     
