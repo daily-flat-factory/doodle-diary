@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}Doodle-Diary — 오늘의 그림일기{% endblock %}
+
+{% block content %}
+<div class="page-wrap">
+
+  <!-- 날짜 헤더 -->
+  <div class="date-header">
+    <span id="today-date" class="today-date"></span>
+    <span class="date-label">오늘의 일기</span>
+  </div>
+
+  <!-- 일기 작성 폼 -->
+  <div class="diary-card">
+    <div class="mood-selector">
+      <span class="mood-label">오늘 기분은?</span>
+      <div class="mood-buttons">
+        <button class="mood-btn" data-mood="happy"   title="신남">😊</button>
+        <button class="mood-btn" data-mood="excited" title="설렘">🤩</button>
+        <button class="mood-btn" data-mood="calm"    title="평온">😌</button>
+        <button class="mood-btn" data-mood="sad"     title="슬픔">😢</button>
+        <button class="mood-btn" data-mood="angry"   title="화남">😤</button>
+      </div>
+      <input type="hidden" id="selected-mood" value="neutral" />
+    </div>
+
+    <textarea
+      id="diary-input"
+      class="diary-textarea"
+      placeholder="오늘 있었던 일을 자유롭게 적어보세요 ✏️&#10;AI가 그림일기로 만들어줄게요!"
+      maxlength="2000"
+    ></textarea>
+    <div class="char-counter"><span id="char-count">0</span> / 2000</div>
+
+    <button id="submit-btn" class="submit-btn" onclick="submitDiary()">
+      <span class="btn-text">🖍️ 그림 그려줘!</span>
+      <span class="btn-loading" style="display:none">✏️ 그리는 중...</span>
+    </button>
+  </div>
+
+  <!-- 일일 제한 표시 -->
+  <div id="limit-info" class="limit-info"></div>
+
+  <!-- 결과 영역 -->
+  <div id="result-area" class="result-area" style="display:none">
+    <div class="result-card">
+      <div class="result-image-wrap">
+        <img id="result-image" src="" alt="생성된 그림일기" class="result-image" />
+      </div>
+      <div class="result-actions">
+        <a id="download-btn" href="#" download class="action-btn">💾 저장</a>
+        <button onclick="resetForm()" class="action-btn secondary">✏️ 새 일기</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 갤러리 미리보기 -->
+  <div class="gallery-section">
+    <h2 class="section-title">📚 내 그림일기</h2>
+    <div id="gallery-grid" class="gallery-grid"></div>
+    <div id="gallery-empty" class="gallery-empty" style="display:none">
+      아직 그림일기가 없어요.<br>첫 번째 일기를 써보세요! 🎨
+    </div>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  // 오늘 날짜 표시
+  const d = new Date();
+  document.getElementById("today-date").textContent =
+    `${d.getFullYear()}년 ${d.getMonth()+1}월 ${d.getDate()}일`;
+</script>
+{% endblock %}

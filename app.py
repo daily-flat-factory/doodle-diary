@@ -4,6 +4,10 @@ from flask import Flask, render_template, session
 from flask_cors import CORS
 from config import Config
 
+from database.models import init_db
+from routes.diary import diary_bp
+from routes.user import user_bp
+
 
 def create_app():
     app = Flask(__name__)
@@ -55,4 +59,4 @@ def create_app():
 app = create_app()
 
 if __name__ == '__main__':
-    app.run(Config.FLASK_ENV == "development", port=5000)
+    app.run(debug=Config.FLASK_ENV == "development", port=5000)

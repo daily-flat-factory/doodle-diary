@@ -1,0 +1,322 @@
+/* ============================================================
+   Doodle-Diary — 그림일기 감성 CSS
+   폰트: Gaegu (손글씨 느낌), Nanum Pen Script
+   ============================================================ */
+
+:root {
+  --cream:       #FFF9F0;
+  --paper:       #FFFDF5;
+  --ink:         #2C2C2C;
+  --ink-light:   #5C5C5C;
+  --crayon-blue: #4A90D9;
+  --crayon-red:  #E85D5D;
+  --crayon-green:#5DBF7A;
+  --crayon-yellow:#F7C948;
+  --line-color:  #E8D5B0;
+  --shadow:      rgba(0,0,0,0.08);
+  --radius:      16px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background-color: var(--cream);
+  background-image:
+    repeating-linear-gradient(
+      transparent,
+      transparent 31px,
+      var(--line-color) 31px,
+      var(--line-color) 32px
+    );
+  font-family: 'Gaegu', cursive;
+  color: var(--ink);
+  min-height: 100vh;
+}
+
+/* ── 헤더 ─────────────────────────────────────────────── */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 24px;
+  background: rgba(255,249,240,0.92);
+  backdrop-filter: blur(8px);
+  border-bottom: 2px solid var(--line-color);
+}
+
+.logo {
+  font-family: 'Nanum Pen Script', cursive;
+  font-size: 1.8rem;
+  color: var(--crayon-blue);
+  text-decoration: none;
+  letter-spacing: 1px;
+}
+
+.limit-badge {
+  font-size: 0.95rem;
+  color: var(--ink-light);
+  background: var(--paper);
+  border: 2px dashed var(--line-color);
+  border-radius: 24px;
+  padding: 4px 14px;
+}
+
+/* ── 레이아웃 ─────────────────────────────────────────── */
+.page-wrap {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 24px 16px 60px;
+}
+
+/* ── 날짜 헤더 ───────────────────────────────────────── */
+.date-header {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.today-date {
+  font-family: 'Nanum Pen Script', cursive;
+  font-size: 1.6rem;
+  color: var(--crayon-blue);
+}
+
+.date-label {
+  font-size: 1rem;
+  color: var(--ink-light);
+}
+
+/* ── 일기 카드 ───────────────────────────────────────── */
+.diary-card {
+  background: var(--paper);
+  border: 2px solid var(--line-color);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: 4px 4px 0 var(--line-color);
+  margin-bottom: 16px;
+}
+
+/* ── 기분 선택 ───────────────────────────────────────── */
+.mood-selector {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.mood-label {
+  font-size: 1rem;
+  color: var(--ink-light);
+}
+
+.mood-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.mood-btn {
+  font-size: 1.5rem;
+  background: none;
+  border: 2px solid transparent;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  cursor: pointer;
+  transition: transform 0.15s, border-color 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mood-btn:hover   { transform: scale(1.2); }
+.mood-btn.selected {
+  border-color: var(--crayon-blue);
+  background: rgba(74,144,217,0.1);
+  transform: scale(1.15);
+}
+
+/* ── 텍스트 영역 ──────────────────────────────────────── */
+.diary-textarea {
+  width: 100%;
+  min-height: 180px;
+  border: none;
+  border-bottom: 2px dashed var(--line-color);
+  background: transparent;
+  font-family: 'Gaegu', cursive;
+  font-size: 1.15rem;
+  line-height: 2;
+  color: var(--ink);
+  resize: vertical;
+  outline: none;
+  padding: 8px 4px;
+}
+
+.diary-textarea::placeholder { color: #C0A882; }
+
+.char-counter {
+  text-align: right;
+  font-size: 0.85rem;
+  color: var(--ink-light);
+  margin-top: 6px;
+  margin-bottom: 16px;
+}
+
+/* ── 제출 버튼 ───────────────────────────────────────── */
+.submit-btn {
+  width: 100%;
+  padding: 14px;
+  background: var(--crayon-blue);
+  color: white;
+  border: none;
+  border-radius: var(--radius);
+  font-family: 'Gaegu', cursive;
+  font-size: 1.2rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 0 #2E6FAF;
+  transition: transform 0.1s, box-shadow 0.1s;
+  letter-spacing: 1px;
+}
+
+.submit-btn:hover  { transform: translateY(-2px); box-shadow: 0 6px 0 #2E6FAF; }
+.submit-btn:active { transform: translateY(2px);  box-shadow: 0 2px 0 #2E6FAF; }
+.submit-btn:disabled {
+  background: #B0C4DE;
+  box-shadow: 0 4px 0 #8FA8C8;
+  cursor: not-allowed;
+}
+
+/* ── 제한 정보 ───────────────────────────────────────── */
+.limit-info {
+  text-align: center;
+  font-size: 0.95rem;
+  color: var(--ink-light);
+  margin: 8px 0 16px;
+}
+
+.limit-info.exceeded {
+  color: var(--crayon-red);
+  font-size: 1.1rem;
+}
+
+/* ── 결과 카드 ───────────────────────────────────────── */
+.result-area { margin-bottom: 32px; }
+
+.result-card {
+  background: var(--paper);
+  border: 2px solid var(--line-color);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: 4px 4px 0 var(--line-color);
+  text-align: center;
+}
+
+.result-image-wrap {
+  background: white;
+  border: 2px dashed var(--line-color);
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 16px;
+  display: inline-block;
+  width: 100%;
+}
+
+.result-image {
+  max-width: 100%;
+  border-radius: 8px;
+  image-rendering: pixelated;
+}
+
+.result-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.action-btn {
+  padding: 10px 24px;
+  background: var(--crayon-green);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-family: 'Gaegu', cursive;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 3px 0 #3A9B5A;
+  transition: transform 0.1s;
+}
+
+.action-btn:hover     { transform: translateY(-1px); }
+.action-btn.secondary { background: var(--line-color); color: var(--ink); box-shadow: 0 3px 0 #C8B890; }
+
+/* ── 갤러리 ──────────────────────────────────────────── */
+.gallery-section { margin-top: 32px; }
+
+.section-title {
+  font-family: 'Nanum Pen Script', cursive;
+  font-size: 1.6rem;
+  color: var(--ink);
+  margin-bottom: 16px;
+  border-bottom: 2px dashed var(--line-color);
+  padding-bottom: 8px;
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 14px;
+}
+
+.gallery-item {
+  background: var(--paper);
+  border: 2px solid var(--line-color);
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+  box-shadow: 3px 3px 0 var(--line-color);
+}
+
+.gallery-item:hover {
+  transform: translateY(-3px) rotate(1deg);
+  box-shadow: 5px 5px 0 var(--line-color);
+}
+
+.gallery-item img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  display: block;
+}
+
+.gallery-item-date {
+  padding: 6px 8px;
+  font-size: 0.85rem;
+  color: var(--ink-light);
+  text-align: center;
+}
+
+.gallery-empty {
+  text-align: center;
+  color: var(--ink-light);
+  font-size: 1.1rem;
+  padding: 40px;
+  line-height: 2;
+}
+
+/* ── 반응형 ──────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .logo    { font-size: 1.4rem; }
+  .page-wrap { padding: 16px 12px 50px; }
+  .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+}
