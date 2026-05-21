@@ -59,4 +59,4 @@ def create_app():
 app = create_app()
 
 if __name__ == '__main__':
-    app.run(Config.FLASK_ENV == "development", port=5000)
+    app.run(debug=Config.FLASK_ENV == "development", port=5000)
