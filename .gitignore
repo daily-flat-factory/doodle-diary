@@ -1,6 +1,7 @@
 # Python-generated files
 __pycache__/
 *.py[oc]
+*$py.class
 build/
 dist/
 wheels/
@@ -8,3 +9,37 @@ wheels/
 
 # Virtual environments
 .venv
+venv/
+env/
+
+# Logs and databases
+*.log
+*.db
+*.sqlite
+*.sqlite3
+instance/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# IDE and editor files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# uv
+.uv-cache/
+
+# Flask
+.flaskenv
+
+# Generated images / uploads
+static/uploads/
+static/generated/
+uploads/
+generated/
