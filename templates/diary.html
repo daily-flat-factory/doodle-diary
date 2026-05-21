@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Doodle-Diary — 그림일기 보기{% endblock %}
+
+{% block content %}
+<div class="page-wrap">
+  <a href="/" class="back-btn">← 돌아가기</a>
+
+  <div id="diary-detail" class="result-card" style="margin-top:20px">
+    <div class="result-image-wrap">
+      <img id="detail-image" src="" alt="그림일기" class="result-image" />
+    </div>
+    <div id="detail-date"  style="text-align:center; font-size:1.2rem; margin:12px 0;"></div>
+    <div id="detail-mood"  style="text-align:center; font-size:1.5rem; margin-bottom:16px;"></div>
+    <div class="result-actions">
+      <a id="detail-download" href="#" download class="action-btn">💾 저장</a>
+      <button onclick="deleteDiary()" class="action-btn" style="background:#E85D5D; box-shadow:0 3px 0 #B04040">
+        🗑️ 삭제
+      </button>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  const diaryId = "{{ diary_id }}";
+  const moodEmoji = { happy:"😊", excited:"🤩", calm:"😌", sad:"😢", angry:"😤", neutral:"📝" };
+
+  async function loadDiary() {
+    const res  = await fetch(`/api/diary/${diaryId}`, { credentials: "include" });
+    if (!res.ok) { window.location.href = "/"; return; }
+
+    const data = await res.json();
+    document.getElementById("detail-image").src      = data.image_path;
+    document.getElementById("detail-download").href  = data.image_path;
+    document.getElementById("detail-date").textContent = data.diary_date?.replace(/-/g, "년 ").replace(/(\d+)$/, "$1일") || "";
+    document.getElementById("detail-mood").textContent = moodEmoji[data.mood] || "📝";
+  }
+
+  async function deleteDiary() {
+    if (!confirm("이 그림일기를 삭제할까요? 되돌릴 수 없어요.")) return;
+    const res = await fetch(`/api/diary/${diaryId}`, { method: "DELETE", credentials: "include" });
+    if (res.ok) window.location.href = "/";
+    else alert("삭제 중 오류가 발생했어요.");
+  }
+
+  loadDiary();
+</script>
+{% endblock %}
