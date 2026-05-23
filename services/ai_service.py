@@ -1,19 +1,30 @@
 import os
 import uuid
 import requests
-import anthropic
+from openai import OpenAI
 from config import Config
+from huggingface_hub import InferenceClient
 
 
-# ── Claude API 클라이언트 (싱글턴) ────────────────────────
-_claude_client = None
+# ── OpenAI API 클라이언트 (싱글턴) ────────────────────────
+_openai_client = None
+_hf_client = None
 
-def get_claude_client():
-    global _claude_client
-    if _claude_client is None:
-        _claude_client = anthropic.Anthropic(api_key=Config.ANTHROPIC_API_KEY)
-    return _claude_client
+def get_openai_client():
+    global _openai_client
+    if _openai_client is None:
+        _openai_client = OpenAI(api_key=Config.OPENAI_API_KEY)
+    return _openai_client
 
+
+def get_hf_client():
+    global _hf_client
+    if _hf_client is None:
+        _hf_client = InferenceClient(
+            provider="hf-inference",
+            api_key=Config.HF_API_KEY
+        )
+    return _hf_client
 
 # ── Step 1: 일기 → 이미지 프롬프트 변환 ──────────────────
 
@@ -29,7 +40,7 @@ Rules:
 6. Never include personal names or identifying information.
 
 Style keywords to always append:
-"children's crayon drawing, kindergarten art style, thick outlines, bright colors, naive art, simple shapes, white background"
+"children's crayon drawing, kindergarten art style, sketched style,thick outlines, bright colors, naive art, simple shapes, white background"
 
 Example:
 Input: "오늘 친구랑 공원에서 놀았다. 강아지도 봤어. 아이스크림도 먹었고 진짜 행복했다."
@@ -43,18 +54,17 @@ def diary_to_image_prompt(diary_content: str) -> str:
     ⚠️  프라이버시: diary_content 는 이 함수 안에서만 사용되고
         절대 DB에 저장되지 않습니다. 반환값(프롬프트)만 저장됩니다.
     """
-    client = get_claude_client()
+    client = get_openai_client()
 
-    message = client.messages.create(
-        model="claude-sonnet-4-20250514",
-        max_tokens=200,
-        system=PROMPT_EXTRACTION_SYSTEM,
+    message = client.chat.completions.create(
+        model="gpt-5.4-nano",
+        max_completion_tokens=200,
         messages=[
-            {"role": "user", "content": diary_content}
+            {"role": "system", "content": PROMPT_EXTRACTION_SYSTEM},
+            {"role": "user",   "content": diary_content}
         ]
     )
-
-    prompt = message.content[0].text.strip()
+    prompt = message.choices[0].message.content.strip()
     return prompt
 
 
@@ -65,35 +75,22 @@ def generate_image_from_prompt(prompt: str) -> str:
     HuggingFace Inference API로 이미지 생성.
     생성된 이미지를 로컬에 저장하고 경로를 반환합니다.
     """
-    headers = {"Authorization": f"Bearer {Config.HF_API_KEY}"}
-    payload = {
-        "inputs": prompt,
-        "parameters": {
-            "negative_prompt": "realistic, photographic, detailed, adult, scary, dark",
-            "num_inference_steps": 30,
-            "guidance_scale": 7.5,
-        }
-    }
+    client = get_hf_client()
 
-    response = requests.post(
-        Config.hf_api_url(),
-        headers=headers,
-        json=payload,
-        timeout=60
+    image = client.text_to_image(
+        prompt,
+        model=Config.HF_MODEL_ID,
+        negative_prompt= "realistic, photographic, detailed, adult, scary, dark",
+        num_inference_steps= 30,
+        guidance_scale= 7.5
     )
-
-    if response.status_code != 200:
-        raise RuntimeError(
-            f"HuggingFace API error: {response.status_code} — {response.text[:200]}"
-        )
 
     # 이미지 바이너리 저장
     os.makedirs(Config.IMAGE_SAVE_PATH, exist_ok=True)
     filename  = f"{uuid.uuid4()}.png"
     save_path = os.path.join(Config.IMAGE_SAVE_PATH, filename)
 
-    with open(save_path, "wb") as f:
-        f.write(response.content)
+    image.save(save_path)
 
     # 웹에서 접근 가능한 경로 반환 (/static/images/generated/xxx.png)
     web_path = save_path.replace("./static", "/static", 1)

@@ -49,7 +49,10 @@ def create_diary():
         result = process_diary(diary_content)
     except Exception as e:
         # 에러 로그에 diary_content 절대 포함 금지
-        print(f"[ERROR] AI pipeline failed for user {user_id[:8]}... : {type(e).__name__}")
+        # print(f"[ERROR] AI pipeline failed for user {user_id[:8]}... : {type(e).__name__}")
+        import traceback
+        traceback.print_exc()   # 풀 스택트레이스 출력!
+        print(f"[ERROR] {type(e).__name__}: {str(e)}")
         return jsonify({"error": "이미지 생성 중 오류가 발생했어요. 잠시 후 다시 시도해주세요."}), 500
 
     # ── DB 저장 (원문 미포함) ──────────────────────────────
