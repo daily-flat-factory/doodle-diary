@@ -22,8 +22,8 @@ def create_app():
 
     # Blueprint 등록
     # TODO : Blueprint - Flask에서 애플리케이션을 모듈화하는 방법, 라우트와 관련된 코드를 별도의 파일로 분리하여 관리
-    # app.register_blueprint(diary_bp)
-    # app.register_blueprint(user_bp)
+    app.register_blueprint(diary_bp)
+    app.register_blueprint(user_bp)
 
     # DB 초기화
     with app.app_context():
