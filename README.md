@@ -18,7 +18,7 @@ doodle-diary/
 │   ├── diary.py            # 일기 CRUD API
 │   └── user.py             # 사용자 초기화 / 데이터 삭제
 ├── services/
-│   └── ai_service.py       # Claude API + HuggingFace 파이프라인
+│   └── ai_service.py       # OpenAI API + HuggingFace 파이프라인
 ├── templates/
 │   ├── base.html
 │   ├── index.html          # 메인 (일기 작성)
@@ -75,6 +75,6 @@ python app.py
 
 ## 로드맵
 
-- **Phase 1 (현재)**: Flask 웹앱, Claude API + HuggingFace, 일일 3회 제한
+- **Phase 1 (현재)**: Flask 웹앱, OpenAI API + HuggingFace, 일일 3회 제한
 - **Phase 2**: 모바일 앱, AES-256 암호화, 광고 기반 추가 크레딧
 - **Phase 3**: 그림체 변경 (LoRA 교체), 프리미엄 구독
