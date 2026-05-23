@@ -11,7 +11,7 @@ class Config:
     # ── API Keys ───────────────────────────────────────
     OPENAI_API_KEY     = os.getenv("OPENAI_API_KEY")
     HF_API_KEY         = os.getenv("HF_API_KEY")
-    HF_MODEL_ID        = os.getenv("HF_MODEL_ID", "alvdansen/littletinies")
+    HF_MODEL_ID        = os.getenv("HF_MODEL_ID", "black-forest-labs/FLUX.1-schnell")
 
     # ── 이미지 생성 제한 ────────────────────────────────
     DAILY_LIMIT        = int(os.getenv("DAILY_LIMIT", 3))
@@ -28,5 +28,6 @@ class Config:
     # ── HuggingFace API URL ────────────────────────────
     @staticmethod
     def hf_api_url():
-        model_id = os.getenv("HF_MODEL_ID", "alvdansen/littletinies")
-        return f"https://api-inference.huggingface.co/models/{model_id}"
+        model_id = os.getenv("HF_MODEL_ID", "black-forest-labs/FLUX.1-schnell")
+        # return f"https://api-inference.huggingface.co/models/{model_id}"
+        return f"https://router.huggingface.co/hf-inference/models/{model_id}"
