@@ -9,7 +9,7 @@ class Config:
     FLASK_ENV          = os.getenv("FLASK_ENV", "production")
 
     # ── API Keys ───────────────────────────────────────
-    ANTHROPIC_API_KEY  = os.getenv("ANTHROPIC_API_KEY")
+    OPENAI_API_KEY     = os.getenv("OPENAI_API_KEY")
     HF_API_KEY         = os.getenv("HF_API_KEY")
     HF_MODEL_ID        = os.getenv("HF_MODEL_ID", "alvdansen/littletinies")
 
